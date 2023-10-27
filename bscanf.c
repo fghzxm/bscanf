@@ -30,10 +30,14 @@ int bscanf(const char *buffer, const char *format, ...)
   unsigned long *ulong_ptr;
   unsigned short *ushort_ptr;
   unsigned int *uint_ptr;
+#ifdef BSCANF_HAS_FLOAT
   double *double_ptr;
-  float*float_ptr;
+  float *float_ptr;
+#endif
   char *char_ptr;
+#if 0
   wchar_t *wchar_ptr;
+#endif
 
   /* These are useful variables when doing string to number conversion. */
   char* end_ptr;
@@ -145,11 +149,13 @@ int bscanf(const char *buffer, const char *format, ...)
           fmt_ptr++;
           continue;
 
+#if 0
         } else if ('l' == length_mod) {
           wchar_ptr = va_arg(args, wchar_t*);
           _BSCANF_CHECK_NULL(char_ptr);
           /* TODO: Implementation. */
           _BSCANF_CHECK(0);
+#endif
 
         } else {
           char_ptr = va_arg(args, char*);
@@ -206,6 +212,7 @@ int bscanf(const char *buffer, const char *format, ...)
         buf_ptr = end_ptr;
         num_args_set++;
 
+#ifdef BSCANF_HAS_FLOAT
       } else if ('g' == *fmt_ptr || 'e' == *fmt_ptr || 'f' == *fmt_ptr ||
                  'G' == *fmt_ptr || 'E' == *fmt_ptr || 'F' == *fmt_ptr) {
         /* 'g'/'e'/'f': match a float in strtod form. */
@@ -229,6 +236,7 @@ int bscanf(const char *buffer, const char *format, ...)
         _BSCANF_CHECK_STRTONUM();
         buf_ptr = end_ptr;
         num_args_set++;
+#endif
 
       } else if ('u' == *fmt_ptr || 'o' == *fmt_ptr || 'x' == *fmt_ptr ||
                  'X' == *fmt_ptr) {
